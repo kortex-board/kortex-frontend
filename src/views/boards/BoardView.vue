@@ -2,85 +2,65 @@
 	import { storeToRefs } from "pinia";
 	import { onMounted } from "vue";
 	import { useRoute } from "vue-router";
-	import List from "@/components/kanban/List.vue";
+	import ListComponent from "@/components/kanban/List.vue";
 	import { getBoard } from "@/services/boardService";
+	import {
+		createList,
+		deleteList,
+		getLists,
+		updateList,
+	} from "@/services/listService";
+	import { createTask, deleteTask, updateTask } from "@/services/taskService";
 	import { useKanbanStore } from "@/stores/kanban";
-	import type { List as ListType } from "@/types";
+	import type { List, Task } from "@/types";
 
 	const route = useRoute();
 	const store = useKanbanStore();
-	const { currentBoard: board } = storeToRefs(store);
+	const { currentBoard: board, lists } = storeToRefs(store);
 
 	onMounted(async () => {
 		const boardId = route.params.id as string;
 		await getBoard(boardId);
+		await getLists(boardId);
 	});
 
-	const createNewList = () => {
+	const createNewList = async () => {
 		const listName = prompt("Enter the name of the new list:");
 		if (listName && board.value) {
-			board.value?.lists.push({
-				id: Date.now().toString(),
-				title: listName,
-				tasks: [],
-			});
+			await createList(listName, board.value.id);
 		}
 	};
 
-	const updateList = (listIndex: number, newList: ListType) => {
-		if (board.value) {
-			board.value.lists[listIndex] = newList;
+	const handleUpdateList = async (list: List) => {
+		const newTitle = prompt("Enter the new list title:", list.title);
+		if (newTitle) {
+			await updateList(list.id, newTitle);
 		}
 	};
 
-	const deleteList = (listId: string) => {
-		if (board.value) {
-			board.value.lists = board.value.lists.filter(
-				(list) => list.id !== listId,
-			);
+	const handleDeleteList = async (listId: string) => {
+		if (confirm("Are you sure you want to delete this list?")) {
+			await deleteList(listId);
 		}
 	};
 
-	const editTask = (listIndex: number, taskIndex: number) => {
-		if (
-			board.value?.lists[listIndex]?.tasks[taskIndex]
-		) {
-			const newTitlePrompt = prompt(
-				"Enter the new task title:",
-				board.value.lists[listIndex].tasks[taskIndex].title,
-			);
-			if (newTitlePrompt) {
-				board.value.lists[listIndex].tasks[taskIndex].title = newTitlePrompt;
-			}
+	const createNewTask = async (listId: string) => {
+		const taskName = prompt("Enter the name of the new task:");
+		if (taskName) {
+			await createTask(taskName, listId);
 		}
 	};
 
-	const deleteTask = (listIndex: number, taskIndex: number) => {
-		if (board.value?.lists[listIndex]) {
-			board.value.lists[listIndex].tasks.splice(taskIndex, 1);
+	const handleUpdateTask = async (task: Task) => {
+		const newTitle = prompt("Enter the new task title:", task.title);
+		if (newTitle) {
+			await updateTask(task.id, { title: newTitle });
 		}
 	};
 
-	const handleDragStart = (
-		event: DragEvent,
-		item: { fromList: number; fromTask: number },
-	) => {
-		if (event.dataTransfer) {
-			event.dataTransfer.setData("text/plain", JSON.stringify(item));
-		}
-	};
-
-	const handleDrop = (event: DragEvent, toList: number) => {
-		if (event.dataTransfer && board.value) {
-			const item = JSON.parse(event.dataTransfer.getData("text/plain"));
-			const fromList = board.value.lists[item.fromList];
-			const toListRef = board.value.lists[toList];
-			if (fromList && toListRef) {
-				const task = fromList.tasks.splice(item.fromTask, 1)[0];
-				if (task) {
-					toListRef.tasks.push(task);
-				}
-			}
+	const handleDeleteTask = async (taskId: string) => {
+		if (confirm("Are you sure you want to delete this task?")) {
+			await deleteTask(taskId);
 		}
 	};
 </script>
@@ -92,31 +72,25 @@
 	>
 		<h1>{{ board.title }}</h1>
 		<div class="lists-container">
-			<List
-				v-for="(list, listIndex) in board.lists"
+			<ListComponent
+				v-for="(list, listIndex) in lists"
 				:key="list.id"
 				:list="list"
-				@update:list="updateList(listIndex, $event)"
-				@delete:list="deleteList($event)"
-				@dragover.prevent
-				@drop="handleDrop($event, listIndex)"
+				@update:list="handleUpdateList(list)"
+				@delete:list="handleDeleteList(list.id)"
+				@create:task="createNewTask(list.id)"
 			>
 				<template #tasks>
 					<div
-						v-for="(task, taskIndex) in list.tasks"
+						v-for="task in list.tasks"
 						:key="task.id"
 						class="task-card"
-						draggable="true"
-						@dragstart="handleDragStart($event, { fromList: listIndex, fromTask: taskIndex })"
 					>
-						<span>{{ task.title }}</span>
-						<div>
-							<button @click="editTask(listIndex, taskIndex)">Edit</button>
-							<button @click="deleteTask(listIndex, taskIndex)">×</button>
-						</div>
+						<span @click="handleUpdateTask(task)">{{ task.title }}</span>
+						<button @click="handleDeleteTask(task.id)">×</button>
 					</div>
 				</template>
-			</List>
+			</ListComponent>
 			<div
 				class="new-list-card"
 				@click="createNewList"

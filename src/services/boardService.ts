@@ -20,7 +20,7 @@ export const deleteBoard = async (id: string) => {
 	const store = useKanbanStore();
 	await api.delete(`/board/${id}`);
 	const boards = store.boards.filter(
-		(board: { id: string; name: string }) => board.id !== id,
+		(board: { id: string; title: string }) => board.id !== id,
 	);
 	store.setBoards(boards);
 	return id;

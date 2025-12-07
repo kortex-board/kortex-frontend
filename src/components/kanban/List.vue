@@ -2,51 +2,23 @@
 	import { type PropType, ref } from "vue";
 	import type { List } from "@/types";
 
-	const props = defineProps({
+	defineProps({
 		list: {
 			type: Object as PropType<List>,
 			required: true,
 		},
 	});
 
-	const emit = defineEmits(["update:list", "delete:list"]);
-
-	const newTaskTitle = ref("");
-
-	const addTask = () => {
-		if (newTaskTitle.value.trim()) {
-			const newList = { ...props.list };
-			newList.tasks.push({
-				id: Date.now().toString(),
-				title: newTaskTitle.value.trim(),
-			});
-			emit("update:list", newList);
-			newTaskTitle.value = "";
-		}
-	};
-
-	const editListName = () => {
-		const newName = prompt("Enter the new list name:", props.list.title);
-		if (newName && newName.trim() !== props.list.title) {
-			const newList = { ...props.list, name: newName.trim() };
-			emit("update:list", newList);
-		}
-	};
-
-	const deleteList = () => {
-		if (confirm("Are you sure you want to delete this list?")) {
-			emit("delete:list", props.list.id);
-		}
-	};
+	const emit = defineEmits(["update:list", "delete:list", "create:task"]);
 </script>
 
 <template>
 	<div class="list">
 		<div class="list-header">
-			<h3 @click="editListName">{{ list.title }}</h3>
+			<h3 @click="emit('update:list', list)">{{ list.title }}</h3>
 			<button
 				class="delete-list-btn"
-				@click="deleteList"
+				@click="emit('delete:list', list.id)"
 			>
 				×
 			</button>
@@ -54,15 +26,8 @@
 		<div class="tasks">
 			<slot name="tasks" />
 		</div>
-		<div class="add-task-form">
-			<form @submit.prevent="addTask">
-				<input
-					v-model="newTaskTitle"
-					type="text"
-					placeholder="Add a new task..."
-				/>
-				<button type="submit">+</button>
-			</form>
+		<div class="add-task">
+			<button @click="emit('create:task')">+ Add a task</button>
 		</div>
 	</div>
 </template>
@@ -100,22 +65,14 @@
 		min-height: 50px;
 		margin-top: 1rem;
 	}
-	.add-task-form form {
-		display: flex;
-		margin-top: 1rem;
-	}
-	.add-task-form input {
-		flex-grow: 1;
+	.add-task button {
+		width: 100%;
 		padding: 0.5rem;
-		border: 1px solid #ccc;
-		border-radius: 4px 0 0 4px;
-	}
-	.add-task-form button {
-		padding: 0.5rem 1rem;
-		color: white;
+		color: #888;
+		text-align: left;
 		cursor: pointer;
-		background-color: #007bff;
+		background-color: transparent;
 		border: none;
-		border-radius: 0 4px 4px 0;
+		border-radius: 4px;
 	}
 </style>
