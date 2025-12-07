@@ -1,14 +1,14 @@
 <script setup lang="ts">
 	import { ref } from "vue";
 	import { useRouter } from "vue-router";
+	import { login as loginService } from "@/services/authService";
 
 	const email = ref("");
 	const password = ref("");
 	const router = useRouter();
 
-	const login = () => {
-		// TODO: Implement login logic
-		console.log("Logging in with:", email.value, password.value);
+	const login = async () => {
+		await loginService({ email: email.value, password: password.value });
 		router.push("/boards");
 	};
 </script>

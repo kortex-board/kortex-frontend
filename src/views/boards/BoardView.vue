@@ -5,41 +5,46 @@
 	import List from "@/components/kanban/List.vue";
 	import { getBoard } from "@/services/boardService";
 	import { useKanbanStore } from "@/stores/kanban";
+	import type { List as ListType } from "@/types";
 
 	const route = useRoute();
 	const store = useKanbanStore();
 	const { currentBoard: board } = storeToRefs(store);
 
 	onMounted(async () => {
-		const boardId = Number(route.params.id);
+		const boardId = route.params.id as string;
 		await getBoard(boardId);
 	});
 
 	const createNewList = () => {
 		const listName = prompt("Enter the name of the new list:");
 		if (listName && board.value) {
-			board.value.lists.push({
-				id: Date.now(),
-				name: listName,
+			board.value?.lists.push({
+				id: Date.now().toString(),
+				title: listName,
 				tasks: [],
 			});
 		}
 	};
 
-	const updateList = (listIndex: number, newList: any) => {
+	const updateList = (listIndex: number, newList: ListType) => {
 		if (board.value) {
 			board.value.lists[listIndex] = newList;
 		}
 	};
 
-	const deleteList = (listId: number) => {
+	const deleteList = (listId: string) => {
 		if (board.value) {
-			board.value.lists = board.value.lists.filter((list) => list.id !== listId);
+			board.value.lists = board.value.lists.filter(
+				(list) => list.id !== listId,
+			);
 		}
 	};
 
-	const editTask = (listIndex: number, taskIndex: number, newTitle: string) => {
-		if (board.value) {
+	const editTask = (listIndex: number, taskIndex: number) => {
+		if (
+			board.value?.lists[listIndex]?.tasks[taskIndex]
+		) {
 			const newTitlePrompt = prompt(
 				"Enter the new task title:",
 				board.value.lists[listIndex].tasks[taskIndex].title,
@@ -51,7 +56,7 @@
 	};
 
 	const deleteTask = (listIndex: number, taskIndex: number) => {
-		if (board.value) {
+		if (board.value?.lists[listIndex]) {
 			board.value.lists[listIndex].tasks.splice(taskIndex, 1);
 		}
 	};
@@ -68,11 +73,14 @@
 	const handleDrop = (event: DragEvent, toList: number) => {
 		if (event.dataTransfer && board.value) {
 			const item = JSON.parse(event.dataTransfer.getData("text/plain"));
-			const task = board.value.lists[item.fromList].tasks.splice(
-				item.fromTask,
-				1,
-			)[0];
-			board.value.lists[toList].tasks.push(task);
+			const fromList = board.value.lists[item.fromList];
+			const toListRef = board.value.lists[toList];
+			if (fromList && toListRef) {
+				const task = fromList.tasks.splice(item.fromTask, 1)[0];
+				if (task) {
+					toListRef.tasks.push(task);
+				}
+			}
 		}
 	};
 </script>
@@ -82,7 +90,7 @@
 		v-if="board"
 		class="board-view"
 	>
-		<h1>{{ board.name }}</h1>
+		<h1>{{ board.title }}</h1>
 		<div class="lists-container">
 			<List
 				v-for="(list, listIndex) in board.lists"
@@ -101,10 +109,11 @@
 						draggable="true"
 						@dragstart="handleDragStart($event, { fromList: listIndex, fromTask: taskIndex })"
 					>
-						<span @click="editTask(listIndex, taskIndex, $event.target.innerText)">{{
-							task.title
-						}}</span>
-						<button @click="deleteTask(listIndex, taskIndex)">×</button>
+						<span>{{ task.title }}</span>
+						<div>
+							<button @click="editTask(listIndex, taskIndex)">Edit</button>
+							<button @click="deleteTask(listIndex, taskIndex)">×</button>
+						</div>
 					</div>
 				</template>
 			</List>
@@ -156,15 +165,11 @@
 		cursor: pointer;
 	}
 	.task-card button {
-		visibility: hidden;
 		font-size: 1.2rem;
 		color: #888;
 		cursor: pointer;
 		background: none;
 		border: none;
-	}
-	.task-card:hover button {
-		visibility: visible;
 	}
 
 	.new-list-card {

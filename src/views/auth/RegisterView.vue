@@ -1,15 +1,19 @@
 <script setup lang="ts">
 	import { ref } from "vue";
 	import { useRouter } from "vue-router";
+	import { register as registerService } from "@/services/authService";
 
 	const name = ref("");
 	const email = ref("");
 	const password = ref("");
 	const router = useRouter();
 
-	const register = () => {
-		// TODO: Implement register logic
-		console.log("Registering with:", name.value, email.value, password.value);
+	const register = async () => {
+		await registerService({
+			name: name.value,
+			email: email.value,
+			password: password.value,
+		});
 		router.push("/login");
 	};
 </script>

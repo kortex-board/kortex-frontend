@@ -1,67 +1,130 @@
-# kortex-frontend
+# Kortex
 
-This template should help get you started developing with Vue 3 in Vite.
+Kortex is a web-based Kanban board application designed for streamlined project management. It provides a visual and intuitive interface to help users organize tasks, track progress, and collaborate effectively.
 
-## Recommended IDE Setup
+## Features
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- **Interactive Kanban Boards:** Create and manage multiple boards for different projects.
+- **Customizable Lists:** Organize your workflow with customizable lists like "To Do", "In Progress", and "Done".
+- **Draggable Tasks:** Easily move tasks between lists to reflect their current status.
+- **User Authentication:** Secure your boards with user registration and login.
 
-## Recommended Browser Setup
+## Technologies
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+- **Frontend:**
+  - [Vue 3](https://vuejs.org/)
+  - [Vite](https://vitejs.dev/)
+  - [TypeScript](https://www.typescriptlang.org/)
+  - [Pinia](https://pinia.vuejs.org/) for state management
+  - [Vue Router](https://router.vuejs.org/) for client-side routing
+- **Testing:**
+  - [Vitest](https://vitest.dev/) for unit tests
+  - [Playwright](https://playwright.dev/) for end-to-end tests
 
-## Type Support for `.vue` Imports in TS
+## Contributing
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+Contributions are welcome! Please feel free to submit a pull request.
 
-## Customize configuration
+## License
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Project Setup
+## Project Structure
+
+The project follows a standard Vue 3 application structure:
+
+- `src/`: Contains the main source code.
+  - `assets/`: Static assets like CSS and images.
+  - `components/`: Reusable Vue components.
+  - `router/`: Vue Router configuration.
+  - `services/`: Modules for interacting with APIs.
+  - `stores/`: Pinia store modules for state management.
+  - `views/`: Application views or pages.
+- `e2e/`: End-to-end tests.
+
+## Getting Started
+
+Follow these instructions to set up and run the project locally.
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (version specified in `package.json`)
+
+### Installation
+
+1. Clone the repository:
+
+    ```sh
+    git clone https://github.com/your-username/kortex-frontend.git
+    ```
+
+2. Navigate to the project directory:
+
+    ```sh
+    cd kortex-frontend
+    ```
+
+3. Install the dependencies:
+  
+    ```sh
+    # Install dependencies
+    $ npm install
+    ```
+
+### Development
+
+To start the development server with hot-reloading:
 
 ```sh
-npm install
+# Start the development server with hot-reload
+$ npm run dev
 ```
 
-### Compile and Hot-Reload for Development
+### Building for Production
+
+To build and minify the application for production:
 
 ```sh
-npm run dev
+# Build and minify for production
+$ npm run build
 ```
 
-### Type-Check, Compile and Minify for Production
+### Testing
+
+### Unit Tests
+
+To run the unit tests:
 
 ```sh
-npm run build
+#Run unit tests with Vitest
+$ npm run test:unit
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+### End-to-End Tests
+
+Before running the e2e tests, you need to install the browser binaries for Playwright:
 
 ```sh
-npm run test:unit
-```
-
-### Run End-to-End Tests with [Playwright](https://playwright.dev)
-
-```sh
-# Install browsers for the first run
 npx playwright install
-
-# When testing on CI, must build the project first
-npm run build
-
-# Runs the end-to-end tests
-npm run test:e2e
-# Runs the tests only on Chromium
-npm run test:e2e -- --project=chromium
-# Runs the tests of a specific file
-npm run test:e2e -- tests/example.spec.ts
-# Runs the tests in debug mode
-npm run test:e2e -- --debug
 ```
+
+Then, you can run the tests:
+
+```sh
+# Run E2E tests
+$ npm run test:e2e
+```
+
+## Contact
+
+- GitHub: [kortex-board](https://github.com/kortex-board)
+
+## Acknowledgements
+
+- [Vue 3](https://vuejs.org/)
+- [Vite](https://vitejs.dev/)
+- [Pinia](https://pinia.vuejs.org/)
+- [Vue Router](https://router.vuejs.org/)
+- [Vitest](https://vitest.dev/)
+- [Playwright](https://playwright.dev/)
+- [Biome](https://biomejs.dev/)
