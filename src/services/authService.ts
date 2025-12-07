@@ -1,6 +1,13 @@
 import { useAuthStore } from "@/stores/auth";
-import type { LoginDto, RegisterDto } from "@/types";
+import type { LoginDto, RegisterDto, User } from "@/types";
 import api from "./api";
+
+export const getMe = async () => {
+	const store = useAuthStore();
+	const response = await api.get<User>("/user/me");
+	store.setUser(response.data);
+	return response.data;
+};
 
 export const login = async (credentials: LoginDto) => {
 	const store = useAuthStore();
@@ -10,6 +17,7 @@ export const login = async (credentials: LoginDto) => {
 	);
 	const token = response.data.access_token;
 	store.setToken(token);
+	await getMe();
 	return token;
 };
 

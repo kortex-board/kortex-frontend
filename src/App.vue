@@ -1,33 +1,37 @@
 <script setup lang="ts">
 	import { storeToRefs } from "pinia";
-	import { RouterView, useRouter } from "vue-router";
+	import { onMounted } from "vue";
+	import { RouterView } from "vue-router";
+	import Header from "@/components/Header.vue";
+	import { getMe } from "@/services/authService";
 	import { useAuthStore } from "./stores/auth";
 
 	const authStore = useAuthStore();
 	const { token } = storeToRefs(authStore);
-	const router = useRouter();
 
-	const logout = () => {
-		authStore.logout();
-		router.push("/login");
-	};
+	onMounted(async () => {
+		if (token.value) {
+			await getMe();
+		}
+	});
 </script>
 
 <template>
-	<header v-if="token">
-		<nav>
-			<button @click="logout">Logout</button>
-		</nav>
-	</header>
-	<RouterView />
+	<Header v-if="token" />
+	<main>
+		<RouterView />
+	</main>
 </template>
 
 <style scoped>
-	header {
+	#app {
 		display: flex;
-		justify-content: flex-end;
-		padding: 1rem;
-		background-color: #f8f9fa;
+		flex-direction: column;
+	}
+
+	main {
+		flex-grow: 1;
+		overflow-y: auto;
 	}
 </style>
 

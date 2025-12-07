@@ -37,7 +37,9 @@ router.beforeEach((to, _from, next) => {
 	const authStore = useAuthStore();
 	const isAuthenticated = !!authStore.token;
 
-	if (to.meta.requiresAuth && !isAuthenticated) {
+	if (isAuthenticated && (to.path === "/login" || to.path === "/register")) {
+		next("/boards");
+	} else if (to.meta.requiresAuth && !isAuthenticated) {
 		next("/login");
 	} else {
 		next();
