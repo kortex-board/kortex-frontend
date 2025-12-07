@@ -26,8 +26,8 @@
 	};
 
 	const editListName = () => {
-		const newName = prompt("Enter the new list name:", props.list.name);
-		if (newName && newName.trim() !== props.list.name) {
+		const newName = prompt("Enter the new list name:", props.list.title);
+		if (newName && newName.trim() !== props.list.title) {
 			const newList = { ...props.list, name: newName.trim() };
 			emit("update:list", newList);
 		}
