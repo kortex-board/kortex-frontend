@@ -39,8 +39,9 @@
 				v-for="board in boards"
 				:key="board.id"
 				class="board-card"
+				@click="goToBoard(board.id)"
 			>
-				<h2 @click="goToBoard(board.id)">{{ board.title }}</h2>
+				<h2>{{ board.title }}</h2>
 				<button
 					class="delete-board-btn"
 					@click.stop="deleteBoard(board.id)"
