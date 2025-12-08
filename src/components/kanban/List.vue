@@ -45,10 +45,10 @@
 		border-radius: 8px;
 	}
 	.list-header {
-		overflow: hidden;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		overflow: hidden;
 		word-break: break-word;
 	}
 	.list-header h3 {
