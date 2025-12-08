@@ -33,12 +33,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 The project follows a standard Vue 3 application structure:
 
 - `src/`: Contains the main source code.
-- `assets/`: Static assets like CSS and images.
-- `components/`: Reusable Vue components.
-- `router/`: Vue Router configuration.
-- `services/`: Modules for interacting with APIs.
-- `stores/`: Pinia store modules for state management.
-- `views/`: Application views or pages.
+  - `assets/`: Static assets like CSS and images.
+  - `components/`: Reusable Vue components.
+  - `router/`: Vue Router configuration.
+  - `services/`: Modules for interacting with APIs.
+  - `stores/`: Pinia store modules for state management.
+  - `views/`: Application views or pages.
 - `e2e/`: End-to-end tests.
 
 ## Getting Started
