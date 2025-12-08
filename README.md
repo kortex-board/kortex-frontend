@@ -66,8 +66,7 @@ Follow these instructions to set up and run the project locally.
 3. Install the dependencies:
   
     ```sh
-    # Install dependencies
-    $ npm install
+    npm install
     ```
 
 ## Development
@@ -75,8 +74,7 @@ Follow these instructions to set up and run the project locally.
 To start the development server with hot-reloading:
 
 ```sh
-# Start the development server with hot-reload
-$ npm run dev
+npm run dev
 ```
 
 ## Building for Production
@@ -84,8 +82,7 @@ $ npm run dev
 To build and minify the application for production:
 
 ```sh
-# Build and minify for production
-$ npm run build
+npm run build
 ```
 
 ## Testing
@@ -95,8 +92,7 @@ $ npm run build
 To run the unit tests:
 
 ```sh
-#Run unit tests with Vitest
-$ npm run test:unit
+npm run test:unit
 ```
 
 ## End-to-End Tests
@@ -110,8 +106,7 @@ npx playwright install
 Then, you can run the tests:
 
 ```sh
-# Run E2E tests
-$ npm run test:e2e
+npm run test:e2e
 ```
 
 ## Contact
