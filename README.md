@@ -6,7 +6,6 @@ Kortex is a web-based Kanban board application designed for streamlined project 
 
 - **Interactive Kanban Boards:** Create and manage multiple boards for different projects.
 - **Customizable Lists:** Organize your workflow with customizable lists like "To Do", "In Progress", and "Done".
-- **Draggable Tasks:** Easily move tasks between lists to reflect their current status.
 - **User Authentication:** Secure your boards with user registration and login.
 
 ## Technologies
@@ -34,23 +33,23 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 The project follows a standard Vue 3 application structure:
 
 - `src/`: Contains the main source code.
-  - `assets/`: Static assets like CSS and images.
-  - `components/`: Reusable Vue components.
-  - `router/`: Vue Router configuration.
-  - `services/`: Modules for interacting with APIs.
-  - `stores/`: Pinia store modules for state management.
-  - `views/`: Application views or pages.
+- `assets/`: Static assets like CSS and images.
+- `components/`: Reusable Vue components.
+- `router/`: Vue Router configuration.
+- `services/`: Modules for interacting with APIs.
+- `stores/`: Pinia store modules for state management.
+- `views/`: Application views or pages.
 - `e2e/`: End-to-end tests.
 
 ## Getting Started
 
 Follow these instructions to set up and run the project locally.
 
-### Prerequisites
+## Prerequisites
 
 - [Node.js](https://nodejs.org/) (version specified in `package.json`)
 
-### Installation
+## Installation
 
 1. Clone the repository:
 
@@ -71,7 +70,7 @@ Follow these instructions to set up and run the project locally.
     $ npm install
     ```
 
-### Development
+## Development
 
 To start the development server with hot-reloading:
 
@@ -80,7 +79,7 @@ To start the development server with hot-reloading:
 $ npm run dev
 ```
 
-### Building for Production
+## Building for Production
 
 To build and minify the application for production:
 
@@ -89,9 +88,9 @@ To build and minify the application for production:
 $ npm run build
 ```
 
-### Testing
+## Testing
 
-### Unit Tests
+## Unit Tests
 
 To run the unit tests:
 
@@ -100,7 +99,7 @@ To run the unit tests:
 $ npm run test:unit
 ```
 
-### End-to-End Tests
+## End-to-End Tests
 
 Before running the e2e tests, you need to install the browser binaries for Playwright:
 

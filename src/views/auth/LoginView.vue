@@ -1,15 +1,22 @@
 <script setup lang="ts">
 	import { ref } from "vue";
 	import { useRouter } from "vue-router";
+	import { useToast } from "vue-toastification";
 	import { login as loginService } from "@/services/authService";
 
 	const email = ref("");
 	const password = ref("");
 	const router = useRouter();
+	const toast = useToast();
 
 	const login = async () => {
-		await loginService({ email: email.value, password: password.value });
-		router.push("/boards");
+		try {
+			await loginService({ email: email.value, password: password.value });
+			toast.success("Logged in successfully");
+			router.push("/boards");
+		} catch (error) {
+			toast.error("Failed to login");
+		}
 	};
 </script>
 

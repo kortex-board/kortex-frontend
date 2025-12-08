@@ -74,7 +74,9 @@
 	.board-card {
 		position: relative;
 		padding: 2rem;
+		overflow: hidden;
 		text-align: center;
+		word-break: break-word;
 		cursor: pointer;
 		border: 1px solid #ccc;
 		border-radius: 8px;
