@@ -134,8 +134,11 @@
 		border-radius: 4px;
 	}
 	.task-card span {
+		display: flex;
 		flex-grow: 1;
+		overflow: hidden;
 		color: #333;
+		word-break: break-word;
 		cursor: pointer;
 	}
 	.task-card button {

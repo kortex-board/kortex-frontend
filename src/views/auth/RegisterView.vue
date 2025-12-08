@@ -1,20 +1,27 @@
 <script setup lang="ts">
 	import { ref } from "vue";
 	import { useRouter } from "vue-router";
+	import { useToast } from "vue-toastification";
 	import { register as registerService } from "@/services/authService";
 
 	const name = ref("");
 	const email = ref("");
 	const password = ref("");
 	const router = useRouter();
+	const toast = useToast();
 
 	const register = async () => {
-		await registerService({
-			name: name.value,
-			email: email.value,
-			password: password.value,
-		});
-		router.push("/login");
+		try {
+			await registerService({
+				name: name.value,
+				email: email.value,
+				password: password.value,
+			});
+			toast.success("Registered successfully");
+			router.push("/login");
+		} catch (error) {
+			toast.error("Failed to register");
+		}
 	};
 </script>
 
