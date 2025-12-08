@@ -54,7 +54,7 @@ Follow these instructions to set up and run the project locally.
 1. Clone the repository:
 
     ```sh
-    git clone https://github.com/your-username/kortex-frontend.git
+    git clone https://github.com/kortex-board/kortex-frontend
     ```
 
 2. Navigate to the project directory:
