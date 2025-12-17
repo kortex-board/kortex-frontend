@@ -14,7 +14,7 @@
 	});
 
 	const goToBoard = (id: string) => {
-		router.push(`/boards/${id}`);
+		router.push({name: 'board', params: { id } });
 	};
 
 	const createNewBoard = async () => {

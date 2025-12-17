@@ -18,7 +18,7 @@
 				password: password.value,
 			});
 			toast.success("Registered successfully");
-			router.push("/login");
+			router.push({name: 'login'});
 		} catch (error) {
 			toast.error("Failed to register");
 		}

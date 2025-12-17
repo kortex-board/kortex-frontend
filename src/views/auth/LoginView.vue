@@ -13,7 +13,7 @@
 		try {
 			await loginService({ email: email.value, password: password.value });
 			toast.success("Logged in successfully");
-			router.push("/boards");
+			router.push({name: 'boards'});
 		} catch (error) {
 			toast.error("Failed to login");
 		}

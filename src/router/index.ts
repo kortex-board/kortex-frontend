@@ -1,34 +1,42 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
+import LoginView from "../views/auth/LoginView.vue";
+import RegisterView from "../views/auth/RegisterView.vue";
+import BoardsView from "../views/boards/BoardsView.vue";
+import BoardView from "../views/boards/BoardView.vue";
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
 	routes: [
 		{
 			path: "/",
-			redirect: "/boards",
+			redirect: "/login",
 		},
 		{
 			path: "/login",
 			name: "login",
-			component: () => import("../views/auth/LoginView.vue"),
+			component: LoginView,
 		},
 		{
 			path: "/register",
 			name: "register",
-			component: () => import("../views/auth/RegisterView.vue"),
+			component: RegisterView,
 		},
 		{
 			path: "/boards",
 			name: "boards",
-			component: () => import("../views/boards/BoardsView.vue"),
+			component: BoardsView,
 			meta: { requiresAuth: true },
 		},
 		{
 			path: "/boards/:id",
 			name: "board",
-			component: () => import("../views/boards/BoardView.vue"),
+			component: BoardView,
 			meta: { requiresAuth: true },
+		},
+		{
+			path: "/:pathMatch(.*)*",
+			redirect: "/login",
 		},
 	],
 });
@@ -37,10 +45,10 @@ router.beforeEach((to, _from, next) => {
 	const authStore = useAuthStore();
 	const isAuthenticated = !!authStore.token;
 
-	if (isAuthenticated && (to.path === "/login" || to.path === "/register")) {
-		next("/boards");
+	if (isAuthenticated && (to.name === "login" || to.name === "register")) {
+		next(false);
 	} else if (to.meta.requiresAuth && !isAuthenticated) {
-		next("/login");
+		next({ name: "login" });
 	} else {
 		next();
 	}
