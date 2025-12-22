@@ -2,13 +2,16 @@
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
+import { useKanbanStore } from "@/stores/kanban";
 
 const authStore = useAuthStore();
+const kanbanStore = useKanbanStore();
 const { user } = storeToRefs(authStore);
 const router = useRouter();
 
 const logout = () => {
 	authStore.logout();
+	kanbanStore.$reset();
 	router.push({name: 'login'});
 };
 </script>
