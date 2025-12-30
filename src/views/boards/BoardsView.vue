@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { createBoard, deleteBoard as deleteBoardService, getBoards } from '@/services/boardService'
 import { useKanbanStore } from '@/stores/kanban'
+import BaseModal from '@/components/utils/BaseModal.vue'
+import BaseButton from '@/components/utils/BaseButton.vue'
 
 const router = useRouter()
 const store = useKanbanStore()
 const { boards } = storeToRefs(store)
+const modalIsOpen = ref(false)
+const newBoardName = ref('')
 
 onMounted(async () => {
     await getBoards()
@@ -18,16 +22,25 @@ const goToBoard = (id: string) => {
 }
 
 const createNewBoard = async () => {
-    const newBoardName = prompt('Enter the name of the new board:')
-    if (newBoardName) {
-        await createBoard(newBoardName)
-    }
+    newBoardName.value = ''
+    modalIsOpen.value = true
 }
 
 const deleteBoard = async (id: string) => {
     if (confirm('Are you sure you want to delete this board?')) {
         await deleteBoardService(id)
     }
+}
+
+const closeModal = () => {
+    modalIsOpen.value = false
+}
+
+const confirmAction = async (newBoardName: string) => {
+    if (newBoardName) {
+        await createBoard(newBoardName)
+    }
+    modalIsOpen.value = false
 }
 </script>
 
@@ -47,6 +60,18 @@ const deleteBoard = async (id: string) => {
             <div class="board-card new-board-card" @click="createNewBoard">
                 <h2>+ Create New Board</h2>
             </div>
+            <BaseModal :isOpen="modalIsOpen" title="Create New Board">
+                <template #default>
+                    <p>Enter the name of the new board:</p>
+                    <input v-model="newBoardName" />
+                </template>
+                <template #footer>
+                    <BaseButton color="cancel" @click="closeModal">Cancel</BaseButton>
+                    <BaseButton color="confirm" @click="confirmAction(newBoardName)">
+                        Confirm
+                    </BaseButton>
+                </template>
+            </BaseModal>
         </div>
     </div>
 </template>

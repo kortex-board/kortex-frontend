@@ -85,6 +85,26 @@ To build and minify the application for production:
 npm run build
 ```
 
+## Code Quality
+
+This project uses [ESLint](https://eslint.org/) for linting and [Prettier](https://prettier.io/) for code formatting to ensure code consistency and quality.
+
+### Linting
+
+To check for and fix linting errors, run:
+
+```sh
+npm run lint
+```
+
+### Formatting
+
+To format the entire project, run:
+
+```sh
+npm run format
+```
+
 ## Testing
 
 ## Unit Tests
@@ -121,4 +141,5 @@ npm run test:e2e
 - [Vue Router](https://router.vuejs.org/)
 - [Vitest](https://vitest.dev/)
 - [Playwright](https://playwright.dev/)
-- [Biome](https://biomejs.dev/)
+- [ESLint](https://eslint.org/)
+- [Prettier](https://prettier.io/)

@@ -2,7 +2,7 @@
 import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import ListComponent from '@/components/kanban/KanbanList.vue'
+import KanbanList from '@/components/kanban/KanbanList.vue'
 import { getBoard } from '@/services/boardService'
 import { createList, deleteList, getLists, updateList } from '@/services/listService'
 import { createTask, deleteTask, updateTask } from '@/services/taskService'
@@ -64,7 +64,7 @@ const handleDeleteTask = async (taskId: string) => {
     <div v-if="board" class="board-view">
         <h1>{{ board.title }}</h1>
         <div class="lists-container">
-            <ListComponent
+            <KanbanList
                 v-for="list in lists"
                 :key="list.id"
                 :list="list"
@@ -78,7 +78,7 @@ const handleDeleteTask = async (taskId: string) => {
                         <button @click="handleDeleteTask(task.id)">×</button>
                     </div>
                 </template>
-            </ListComponent>
+            </KanbanList>
             <div class="new-list-card" @click="createNewList">+ Add another list</div>
         </div>
     </div>

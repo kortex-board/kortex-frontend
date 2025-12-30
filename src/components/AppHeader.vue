@@ -3,6 +3,7 @@ import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useKanbanStore } from '@/stores/kanban'
+import BaseButton from '@/components/utils/BaseButton.vue'
 
 const authStore = useAuthStore()
 const kanbanStore = useKanbanStore()
@@ -24,7 +25,7 @@ const logout = () => {
         <nav class="navigation">
             <div v-if="user" class="user-menu">
                 <span>Welcome, {{ user.name }}</span>
-                <button @click="logout" class="logout-button">Logout</button>
+                <BaseButton color="primary" @click="logout">Logout</BaseButton>
             </div>
         </nav>
     </header>
@@ -56,20 +57,5 @@ const logout = () => {
 .user-menu span {
     font-size: 1rem;
     color: #555;
-}
-
-.logout-button {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    color: #ffffff;
-    cursor: pointer;
-    background-color: #007bff;
-    border: none;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-}
-
-.logout-button:hover {
-    background-color: #0056b3;
 }
 </style>

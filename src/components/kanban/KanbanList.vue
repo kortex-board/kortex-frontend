@@ -1,13 +1,9 @@
 <script setup lang="ts">
-import { type PropType } from 'vue'
 import type { List } from '@/types'
 
-defineProps({
-    list: {
-        type: Object as PropType<List>,
-        required: true,
-    },
-})
+const props = defineProps<{
+    list: List
+}>()
 
 const emit = defineEmits(['update:list', 'delete:list', 'create:task'])
 </script>
@@ -15,7 +11,7 @@ const emit = defineEmits(['update:list', 'delete:list', 'create:task'])
 <template>
     <div class="list">
         <div class="list-header">
-            <h3 @click="emit('update:list', list)">{{ list.title }}</h3>
+            <h3 @click="emit('update:list', props.list)">{{ props.list.title }}</h3>
             <button class="delete-list-btn" @click="emit('delete:list', list.id)">×</button>
         </div>
         <div class="tasks">
