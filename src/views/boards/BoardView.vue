@@ -1,17 +1,19 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import KanbanList from '@/components/kanban/KanbanList.vue'
 import { getBoard } from '@/services/boardService'
-import { createList, deleteList, getLists, updateList } from '@/services/listService'
-import { createTask, deleteTask, updateTask } from '@/services/taskService'
+import { createList, getLists } from '@/services/listService'
 import { useKanbanStore } from '@/stores/kanban'
-import type { List, Task } from '@/types'
+import BaseModal from '@/components/utils/BaseModal.vue'
+import BaseButton from '@/components/utils/BaseButton.vue'
 
 const route = useRoute()
 const store = useKanbanStore()
 const { currentBoard: board, lists } = storeToRefs(store)
+const createListModal = ref(false)
+const newListName = ref('')
 
 onMounted(async () => {
     const boardId = route.params.id as string
@@ -20,42 +22,18 @@ onMounted(async () => {
 })
 
 const createNewList = async () => {
-    const listName = prompt('Enter the name of the new list:')
-    if (listName && board.value) {
-        await createList(listName, board.value.id)
-    }
+    newListName.value = ''
+    createListModal.value = true
 }
 
-const handleUpdateList = async (list: List) => {
-    const newTitle = prompt('Enter the new list title:', list.title)
-    if (newTitle) {
-        await updateList(list.id, newTitle)
-    }
+const closeModal = () => {
+    createListModal.value = false
 }
 
-const handleDeleteList = async (listId: string) => {
-    if (confirm('Are you sure you want to delete this list?')) {
-        await deleteList(listId)
-    }
-}
-
-const createNewTask = async (listId: string) => {
-    const taskName = prompt('Enter the name of the new task:')
-    if (taskName) {
-        await createTask(taskName, listId)
-    }
-}
-
-const handleUpdateTask = async (task: Task) => {
-    const newTitle = prompt('Enter the new task title:', task.title)
-    if (newTitle) {
-        await updateTask(task.id, { title: newTitle })
-    }
-}
-
-const handleDeleteTask = async (taskId: string) => {
-    if (confirm('Are you sure you want to delete this task?')) {
-        await deleteTask(taskId)
+const handleConfirm = async (newListName: string) => {
+    if (newListName && board.value) {
+        await createList(newListName, board.value.id)
+        createListModal.value = false
     }
 }
 </script>
@@ -64,27 +42,23 @@ const handleDeleteTask = async (taskId: string) => {
     <div v-if="board" class="board-view">
         <h1>{{ board.title }}</h1>
         <div class="lists-container">
-            <KanbanList
-                v-for="list in lists"
-                :key="list.id"
-                :list="list"
-                @update:list="handleUpdateList(list)"
-                @delete:list="handleDeleteList(list.id)"
-                @create:task="createNewTask(list.id)"
-            >
-                <template #tasks>
-                    <div v-for="task in list.tasks" :key="task.id" class="task-card">
-                        <span @click="handleUpdateTask(task)">{{ task.title }}</span>
-                        <button @click="handleDeleteTask(task.id)">×</button>
-                    </div>
-                </template>
-            </KanbanList>
+            <KanbanList v-for="list in lists" :key="list.id" :list="list"> </KanbanList>
             <div class="new-list-card" @click="createNewList">+ Add another list</div>
         </div>
     </div>
     <div v-else>
         <p>Loading board...</p>
     </div>
+    <BaseModal :isOpen="createListModal" title="Create New List">
+        <template #default>
+            <p>Enter the name of the new list:</p>
+            <input v-model="newListName" />
+        </template>
+        <template #footer>
+            <BaseButton color="cancel" @click="closeModal()">Cancel</BaseButton>
+            <BaseButton color="confirm" @click="handleConfirm(newListName)"> Confirm </BaseButton>
+        </template>
+    </BaseModal>
 </template>
 
 <style scoped>
@@ -103,33 +77,6 @@ const handleDeleteTask = async (taskId: string) => {
     align-items: flex-start;
     padding-bottom: 1rem;
     overflow-x: auto;
-}
-
-.task-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem;
-    margin-bottom: 0.5rem;
-    cursor: grab;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-.task-card span {
-    display: flex;
-    flex-grow: 1;
-    overflow: hidden;
-    color: #333;
-    word-break: break-word;
-    cursor: pointer;
-}
-.task-card button {
-    font-size: 1.2rem;
-    color: #888;
-    cursor: pointer;
-    background: none;
-    border: none;
 }
 
 .new-list-card {

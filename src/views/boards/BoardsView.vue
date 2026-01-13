@@ -10,9 +10,7 @@ import BaseButton from '@/components/utils/BaseButton.vue'
 const router = useRouter()
 const store = useKanbanStore()
 const { boards } = storeToRefs(store)
-const modals = ref({ createBoard: false, deleteBoard: false })
-const newBoardName = ref('')
-const boardToDelete = ref('')
+const modals = ref({ board: { id: '', name: '', create: false, delete: false } })
 
 onMounted(async () => {
     await getBoards()
@@ -23,30 +21,30 @@ const goToBoard = (id: string) => {
 }
 
 const createNewBoard = async () => {
-    newBoardName.value = ''
-    modals.value.createBoard = true
+    modals.value.board.name = ''
+    modals.value.board.create = true
 }
 
 const deleteBoard = async (id: string) => {
-    boardToDelete.value = id
-    modals.value.deleteBoard = true
+    modals.value.board.id = id
+    modals.value.board.delete = true
 }
 
 const closeModal = (modal: string) => {
     if (modal === 'deleteBoard') {
-        modals.value.deleteBoard = false
+        modals.value.board.delete = false
     } else if (modal === 'createBoard') {
-        modals.value.createBoard = false
+        modals.value.board.create = false
     }
 }
 
 const handleConfirm = async (modal: string, newBoardName?: string) => {
     if (modal === 'createBoard' && newBoardName) {
         await createBoard(newBoardName)
-        modals.value.createBoard = false
+        modals.value.board.create = false
     } else if (modal === 'deleteBoard') {
-        await deleteBoardService(boardToDelete.value)
-        modals.value.deleteBoard = false
+        await deleteBoardService(modals.value.board.id)
+        modals.value.board.delete = false
     }
 }
 </script>
@@ -68,33 +66,28 @@ const handleConfirm = async (modal: string, newBoardName?: string) => {
                 <h2>+ Create New Board</h2>
             </div>
         </div>
-        <BaseModal :isOpen="modals.createBoard" title="Create New Board">
-            <template #default>
-                <p>Enter the name of the new board:</p>
-                <input v-model="newBoardName" />
-            </template>
-            <template #footer>
-                <BaseButton color="cancel" @click="closeModal('createBoard')">Cancel</BaseButton>
-                <BaseButton color="confirm" @click="handleConfirm('createBoard', newBoardName)">
-                    Confirm
-                </BaseButton>
-            </template>
-        </BaseModal>
-        <BaseModal :isOpen="modals.deleteBoard" title="Delete Board">
-            <template #default>
-                <p>Are you sure you want to delete this board?</p>
-            </template>
-            <template #footer>
-                <BaseButton color="cancel" @click="closeModal('deleteBoard')">Cancel</BaseButton>
-                <BaseButton
-                    color="confirm"
-                    @click="handleConfirm('deleteBoard')"
-                >
-                    Confirm
-                </BaseButton>
-            </template>
-        </BaseModal>
     </div>
+    <BaseModal :isOpen="modals.board.create" title="Create New Board">
+        <template #default>
+            <p>Enter the name of the new board:</p>
+            <input v-model="modals.board.name" />
+        </template>
+        <template #footer>
+            <BaseButton color="cancel" @click="closeModal('createBoard')">Cancel</BaseButton>
+            <BaseButton color="confirm" @click="handleConfirm('createBoard', modals.board.name)">
+                Confirm
+            </BaseButton>
+        </template>
+    </BaseModal>
+    <BaseModal :isOpen="modals.board.delete" title="Delete Board">
+        <template #default>
+            <p>Are you sure you want to delete this board?</p>
+        </template>
+        <template #footer>
+            <BaseButton color="cancel" @click="closeModal('deleteBoard')">Cancel</BaseButton>
+            <BaseButton color="confirm" @click="handleConfirm('deleteBoard')"> Confirm </BaseButton>
+        </template>
+    </BaseModal>
 </template>
 
 <style scoped>
